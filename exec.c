@@ -1,5 +1,6 @@
 #include "minishell.h"
-int	redir_counter(t_node *tok)
+
+int	redir_counter(struct s_tnode *tok)
 {
 	int	i;
 
@@ -17,7 +18,7 @@ int	redir_counter(t_node *tok)
 	return (i);
 }
 
-t_job	*redirection_to_tab(t_node *token, t_job *job)
+t_job	*redirection_to_tab(struct s_tnode *token, t_job *job)
 {
 	int	counter;
 	int	i;
@@ -41,7 +42,7 @@ t_job	*redirection_to_tab(t_node *token, t_job *job)
 	return (job);
 }
 
-bool	is_redirection(t_node *token)
+bool	is_redirection(struct s_tnode *token)
 {
 	if (token->type == REDIR_L || token->type == REDIR_R 
 		|| token->type == APPEND)
@@ -49,7 +50,7 @@ bool	is_redirection(t_node *token)
 	return (false);
 }
 
-int	counter_string(t_node *tok)
+int	counter_string(struct s_tnode *tok)
 {
 	int	i;
 
@@ -67,7 +68,7 @@ int	counter_string(t_node *tok)
 	}
 	return (i);
 }
-void	token_to_tab(t_node *token, t_job *job)
+void	token_to_tab(struct s_tnode *token, t_job *job)
 {
 	int	i;
 	int	counter;
@@ -97,7 +98,7 @@ void	ms_job_addback(t_job **job, t_job *new_job)
 	}
 }
 
-void	free_token_lst(t_node *tok)
+void	free_token_lst(struct s_tnode *tok)
 {
 	t_token	*temp;
 
@@ -122,7 +123,7 @@ t_job	*ms_job_newlst(void)
 	return (new);
 }
 
-t_job *ft_create_exec(t_job *job, t_node *token)
+t_job *ft_create_exec(t_job *job, struct s_tnode *token)
 {
 	job = ms_job_newlst();
 	while (token && token->str_tok)

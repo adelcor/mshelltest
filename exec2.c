@@ -52,7 +52,7 @@ void	restore_fd(int saved_stdin, int saved_stdout)
 	close(saved_stdout);
 }
 
-int	ms_builtins(char **arg, int i, t_job *job, c_data *c_data)
+int	ms_builtins(char **arg, int i, t_job *job, t_cdata *c_data)
 {
 	if (arg)
 	{
@@ -78,7 +78,7 @@ int	ms_builtins(char **arg, int i, t_job *job, c_data *c_data)
 	free_exit(job);
 	exit(0);
 }
-int	ms_exec_builtins(t_job *job, c_data *c_data)
+int	ms_exec_builtins(t_job *job, t_cdata *c_data)
 {
 	int	saved_stdin;
 	int	saved_stdout;
@@ -91,7 +91,7 @@ int	ms_exec_builtins(t_job *job, c_data *c_data)
 			return (0);
 		if (check_redirection(job, 1) == 1)
 			return (1);
-		if (ms_builtins(job->cmd, 0, job) == 0)
+		if (ms_builtins(job->cmd, 0, job, c_data) == 0)
 		{
 			restore_fd(saved_stdin, saved_stdout);
 			return (1);
@@ -134,7 +134,7 @@ void	child_process(t_job *job, t_job *first)
 		close(job->previous->fd[0]);
 	close(job->fd[1]);
 }
-void	ms_exec(t_job *job, c_data *c_data)
+void	ms_exec(t_job *job, t_cdata *c_data)
 {
 	t_job	*first;
 	int		status;

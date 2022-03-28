@@ -6,7 +6,7 @@
 /*   By: ngasco <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/21 16:52:45 by ngasco            #+#    #+#             */
-/*   Updated: 2022/03/21 16:52:46 by ngasco           ###   ########.fr       */
+/*   Updated: 2022/03/28 16:43:45 by adel-cor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ int	main(int argc, char *argv[], char *envp[])
 
 void	ft_start_loop(t_cdata *t_cdata)
 {
+	t_job *job;
+
 	while (1)
 	{
 		ft_init_loot_pdata(t_cdata);
@@ -64,7 +66,12 @@ void	ft_start_loop(t_cdata *t_cdata)
 		printest(t_cdata->tokens_list);
 		test(t_cdata->tokens_list);
 		tester(t_cdata->tokens_list);
-		ft_check_cmd(t_cdata);
+		job = ft_create_exec(job, t_cdata->tokens_list);
+		if(job)
+			executor(ms_head_list_job(job));
+
+
+//		ft_check_cmd(t_cdata);
 		ft_free_loop_data(t_cdata);
 		printf("\n__________________________________________________________________________\n\n"); // TBD
 	}

@@ -9,7 +9,17 @@
 #include <readline/history.h>
 #include <stdbool.h>
 #include <signal.h>
+#include <unistd.h>
 
+typedef struct s_job
+{
+	struct s_job	*previous;
+	char			**cmd;
+	char			**file;
+	int				fd[2];
+	pid_t			pid;
+	struct s_job	*next;
+} t_job;
 typedef enum	e_type
 {
 	VOID,
@@ -227,5 +237,22 @@ void    ft_print_after_special_chars_expansion(t_cdata *t_cdata);
 void	test(struct s_tnode *test);
 void	tester(struct s_tnode *test);
 void	printest(struct s_tnode *tnode);
+t_job *ft_create_exec(t_job *job, struct s_tnode *token);
+t_job *ms_job_newlst(void);
+void    ms_job_addback(t_job **job, t_job *new_job);
+void    token_to_tab(struct s_tnode *token, t_job *job);
+int counter_string(struct s_tnode *tok);
+bool    is_redirection(struct s_tnode *token);
+t_job   *redirection_to_tab(struct s_tnode *token, t_job *job);
+int redir_counter(struct s_tnode *tok);
+void    ms_exec(t_job *job, t_cdata *c_data);
+void    child_process(t_job *job, t_job *first);
+void    init_pipe(t_job *job);
+int ms_exec_builtins(t_job *job, t_cdata *c_data);
+int ms_builtins(char **arg, int i, t_job *job, t_cdata *c_data);
+void    restore_fd(int saved_stdin, int saved_stdout);
+int check_builtins(char **arg);
+int check_redirection(t_job *job, int quit);
+
 
 #endif
