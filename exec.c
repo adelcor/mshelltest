@@ -37,10 +37,11 @@ t_job	*ms_job_last(t_job *job)
 
 int	redir_counter(struct s_tnode *tok)
 {
+	printf("entra bien en redir\n");
 	int	i;
 
 	i = 0;
-	while (tok)
+	while (tok && tok->next)
 	{
 		if (tok->type == PIPE)
 			tok = tok->next;
@@ -50,17 +51,21 @@ int	redir_counter(struct s_tnode *tok)
 			i++;
 		tok = tok->next;
 	}
+	printf("sale de bucle redir\n");
 	return (i);
 }
 
 t_job	*redirection_to_tab(struct s_tnode *token, t_job *job)
 {
+
 	int	counter;
 	int	i;
 
 	if (!job->file)
-	{
+	{	
+		printf("no file\n");
 		counter = redir_counter(token);
+		printf("redir_counter_ok\n");
 		job->file = ft_calloc((counter * 2) + 1, sizeof(char *));
 	}
 	i = 0;
@@ -177,6 +182,7 @@ t_job *ft_create_exec(t_job *job, struct s_tnode *token)
 		}
 		token = token->next;
 	}
+	printf("sale del bucle\n");
 	free_token_lst(ms_head_list(token));
 	return (ms_head_list_job(job));
 

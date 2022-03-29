@@ -68,7 +68,10 @@ void	ft_start_loop(t_cdata *t_cdata)
 		tester(t_cdata->tokens_list);
 		job = ft_create_exec(job, t_cdata->tokens_list);
 		if(job)
+		{
+			printf("entra en executor\n");
 			executor(ms_head_list_job(job), t_cdata);
+		}
 
 
 //		ft_check_cmd(t_cdata);
