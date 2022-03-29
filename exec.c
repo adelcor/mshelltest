@@ -1,5 +1,40 @@
 #include "minishell.h"
 
+t_job	*ms_head_list_job(t_job *job)
+{
+	while(job)
+	{
+		if(!job->previous)
+			return(job);
+		job = job->previous;
+	}
+	return(job);
+}
+
+
+struct s_tnode *ms_head_list(struct s_tnode *token)
+{
+	while(token)
+	{
+		if(!token->prev)
+			return(token);
+		token = token->prev;
+	}
+	return(token);
+}
+
+
+t_job	*ms_job_last(t_job *job)
+{
+	while(job)
+	{
+		if(job->next == NULL)
+			return(job);
+		job = job->next;
+	}
+	return(job);
+}
+
 int	redir_counter(struct s_tnode *tok)
 {
 	int	i;
@@ -31,14 +66,14 @@ t_job	*redirection_to_tab(struct s_tnode *token, t_job *job)
 	i = 0;
 	while (job->file[i])
 		i++;
-	job->file[i] = ft_calloc(ft_strlen(token->str_tok) + 1, sizeof(char));
-	ft_strcpy(job->file[i], token->str_tok);
+	job->file[i] = ft_calloc(ft_strlen(token->str) + 1, sizeof(char));
+	ft_strcpy(job->file[i], token->str);
 	i++;
 	if (!token->next)
 		return (job);
 	token = token->next;
-	job->file[i] = ft_calloc(ft_strlen(token->str_tok) + 1, sizeof(char));
-	ft_strcpy(job->file[i], token->str_tok);
+	job->file[i] = ft_calloc(ft_strlen(token->str) + 1, sizeof(char));
+	ft_strcpy(job->file[i], token->str);
 	return (job);
 }
 
@@ -81,8 +116,8 @@ void	token_to_tab(struct s_tnode *token, t_job *job)
 	i = 0;
 	while (job->cmd[i])
 		i++;
-	job->cmd[i] = ft_calloc((ft_strlen(token->str_tok) + 1), sizeof(char));
-	ft_strcpy(job->cmd[i], token->str_tok);
+	job->cmd[i] = ft_calloc((ft_strlen(token->str) + 1), sizeof(char));
+	ft_strcpy(job->cmd[i], token->str);
 }
 void	ms_job_addback(t_job **job, t_job *new_job)
 {
@@ -100,13 +135,13 @@ void	ms_job_addback(t_job **job, t_job *new_job)
 
 void	free_token_lst(struct s_tnode *tok)
 {
-	t_token	*temp;
+	struct s_tnode	*temp;
 
 	temp = NULL;
 	while (tok)
 	{
 		temp = tok->next;
-		free(tok->str_tok);
+		free(tok->str);
 		free(tok);
 		tok = temp;
 	}
@@ -126,7 +161,7 @@ t_job	*ms_job_newlst(void)
 t_job *ft_create_exec(t_job *job, struct s_tnode *token)
 {
 	job = ms_job_newlst();
-	while (token && token->str_tok)
+	while (token && token->str)
 	{
 		if (token->type == PIPE)
 		{

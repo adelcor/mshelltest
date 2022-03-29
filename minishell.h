@@ -10,6 +10,9 @@
 #include <stdbool.h>
 #include <signal.h>
 #include <unistd.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 typedef struct s_job
 {
@@ -57,7 +60,7 @@ typedef struct PromptData {
 	char			*prompt_nl_text;
 } t_pdata;
 
-/* Struct for every node representing a word token in the linked list */
+/* Struct for every node representing ; word token in the linked list */
 struct s_tnode {
 	char			*str;
 	int				len;
@@ -246,13 +249,22 @@ bool    is_redirection(struct s_tnode *token);
 t_job   *redirection_to_tab(struct s_tnode *token, t_job *job);
 int redir_counter(struct s_tnode *tok);
 void    ms_exec(t_job *job, t_cdata *c_data);
-void    child_process(t_job *job, t_job *first);
+void    child_process(t_job *job, t_job *first, t_cdata *c_data);
 void    init_pipe(t_job *job);
 int ms_exec_builtins(t_job *job, t_cdata *c_data);
 int ms_builtins(char **arg, int i, t_job *job, t_cdata *c_data);
 void    restore_fd(int saved_stdin, int saved_stdout);
 int check_builtins(char **arg);
 int check_redirection(t_job *job, int quit);
+t_job	*ms_job_last(t_job *job);
+struct s_tnode *ms_head_list(struct s_tnode *token);
+t_job	*ms_head_list_job(t_job *job);
+void	executor(t_job *job, t_cdata *c_data);
+void	execute(char **cmd, t_job *job, t_cdata *c_data);
+void	free_job_lst(t_job *job);
+char	*find_path(char *cmd, t_job *job, t_cdata *c_data);
+int	find_path_env(t_cdata *c_data);
+void	error(char *arg, int i, t_job *job);
 
 
 #endif
